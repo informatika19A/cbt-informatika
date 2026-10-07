@@ -40,11 +40,6 @@
       user-select: none;
     }
 
-    input {
-      -webkit-user-select: auto;
-      user-select: auto;
-    }
-
     body, html {
       width: 100%;
       height: 100%;
@@ -235,18 +230,6 @@
       box-shadow: 0 10px 20px -5px rgba(220, 38, 38, 0.35);
     }
 
-    .btn-secondary {
-      background: #f1f5f9;
-      color: #475569;
-      border: 1px solid #cbd5e1;
-      padding: 10px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-
     /* Catatan Kaki Kaligrafi */
     .card-footer-signature {
       margin-top: 14px;
@@ -260,48 +243,6 @@
       font-weight: 700;
       color: #334155;
       letter-spacing: 0.5px;
-    }
-
-    /* Input Token */
-    .token-box {
-      margin: 16px 0;
-      text-align: left;
-    }
-
-    .token-box label {
-      display: block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #334155;
-      margin-bottom: 6px;
-    }
-
-    .token-box input {
-      width: 100%;
-      padding: 13px;
-      background: #f8fafc;
-      border: 2px solid #cbd5e1;
-      border-radius: 10px;
-      font-size: 1.1rem;
-      color: #0f172a;
-      text-align: center;
-      letter-spacing: 3px;
-      font-weight: 800;
-      text-transform: uppercase;
-      outline: none;
-    }
-
-    .token-box input:focus {
-      border-color: var(--primary);
-      background: #ffffff;
-    }
-
-    .error-msg {
-      color: var(--danger);
-      font-size: 0.8rem;
-      margin-top: 6px;
-      text-align: center;
-      font-weight: 600;
     }
 
     /* Header Ujian Aktif */
@@ -433,7 +374,7 @@
         </div>
         <div class="info-box">
           <span class="label">MAKS. PERINGATAN</span>
-          <span class="value">⚠️ 3x Toleransi</span>
+          <span class="value">⚠️ 5x Toleransi</span>
         </div>
       </div>
 
@@ -448,7 +389,7 @@
         </div>
         <div class="rules-item">
           <span>•</span>
-          <span>Pelanggaran 3x akan <b>mengunci perangkat HP permanen</b>.</span>
+          <span>Pelanggaran 5x akan <b>mengunci perangkat HP permanen</b>.</span>
         </div>
       </div>
 
@@ -463,26 +404,22 @@
     </div>
   </div>
 
-  <!-- 2. Modal Peringatan Sementara (1x & 2x Pelanggaran) -->
+  <!-- 2. Modal Peringatan Sementara (Pelanggaran 1x s.d. 4x) -->
   <div id="warningModal" class="overlay hidden">
     <div class="card" style="border-color: #fca5a5;">
       <div style="font-size: 2.2rem; margin-bottom: 6px;">⚠️</div>
-      <h1 style="color: #dc2626; font-size: 1.25rem;">UJIAN TERKUNCI!</h1>
+      <h1 style="color: #dc2626; font-size: 1.25rem;">PERINGATAN!</h1>
       <p id="warningText" class="subtitle" style="margin-top: 6px; color: #475569;">Terdeteksi membuka aplikasi mengambang atau bilah pintas.</p>
-      
-      <div class="token-box">
-        <label for="inputToken">MASUKKAN TOKEN:</label>
-        <input type="text" id="inputToken" placeholder="••••••••••••" autocomplete="off">
-        <p id="tokenError" class="error-msg hidden">Token tidak sesuai! Silakan hubungi pengajar.</p>
-      </div>
 
-      <button class="btn-glow btn-danger" onclick="unlockExam()">Buka Kunci Layar</button>
+      <button class="btn-glow btn-danger" onclick="resumeExam()">Kembali ke Ujian</button>
     </div>
   </div>
 
   <!-- 3. Modal KUNCI PERMANEN PERANGKAT (Auto-Block) -->
   <div id="lockScreen" class="overlay hidden">
     <div class="card" style="border-color: #fca5a5;">
+      <!-- Area tersembunyi untuk pengawas: ketuk 5x di pojok kanan atas kartu -->
+      <div id="secretZone" onclick="secretTap()" style="position:absolute; top:0; right:0; width:70px; height:70px; z-index:20;"></div>
       <div style="font-size: 2.5rem; margin-bottom: 6px;">🛑</div>
       <h1 style="color: #dc2626; font-size: 1.3rem;">PERANGKAT DIKUNCI</h1>
       <p id="lockMessage" class="subtitle" style="margin-top: 8px; font-weight: 600; color: #334155;">
@@ -491,15 +428,6 @@
       <p style="font-size: 0.75rem; color: #94a3b8; line-height: 1.4;">
         Membuka kembali tautan ini tidak akan membuka ujian. Silakan lapor langsung kepada pengawas di ruangan.
       </p>
-
-      <!-- Panel Khusus Pengawas untuk Buka Kunci Perangkat -->
-      <div id="proctorResetBox" class="hidden" style="margin-top: 15px; border-top: 1px dashed #cbd5e1; padding-top: 12px;">
-        <input type="text" id="resetTokenInput" placeholder="TOKEN UJIAN" style="width:100%; padding:8px; text-align:center; font-weight:bold; margin-bottom:6px; text-transform:uppercase;">
-        <button class="btn-glow" style="padding:10px; font-size:0.85rem;" onclick="resetDeviceLock()">Reset Kunci Perangkat</button>
-        <p id="resetError" class="error-msg hidden">Token salah!</p>
-      </div>
-
-      <button class="btn-secondary" onclick="toggleProctorReset()">Opsi Pengawas</button>
     </div>
   </div>
 
@@ -514,7 +442,7 @@
       </svg>
       <div class="header-titles">
         <span class="exam-title">Sumatif Informatika</span>
-        <span class="violation-badge" id="violationText">Pelanggaran: 0/3</span>
+        <span class="violation-badge" id="violationText">Pelanggaran: 0/5</span>
       </div>
     </div>
     <!-- Timer Header 75 Menit -->
@@ -528,14 +456,56 @@
 
   <script>
     // === KONFIGURASI SISTEM UJIAN ===
-    const EXAM_ID = "INFORMATIKA2026"; // ID unik ujian Fisika Gerak
-    const PROCTOR_TOKEN = "INFORMATIKA2026"; // Token Pengawas Fisika Gerak
-    
+    const EXAM_ID = "INFORMATIKA2026"; // ID unik ujian
+    // Kata sandi pengawas TIDAK disimpan langsung, hanya hash SHA-256 dari "EXAM_ID:kata_sandi".
+    // Untuk mengganti kata sandi: buka halaman ini di browser, tekan F12 > Console, ketik:
+    //   sha256("INFORMATIKA2026:SANDIBARU")
+    // lalu tempel hasilnya ke RESET_HASH di bawah (jika EXAM_ID diubah, ganti juga bagian depan).
+    const RESET_HASH = "d9207c23488a12a0c90e03b6a066a065b477f96b916f9517fcec3fe30c1babd0";
+
+    // SHA-256 (JavaScript murni, jalan di HTTP maupun HTTPS)
+    function sha256(ascii){
+      function rr(v,a){return (v>>>a)|(v<<(32-a));}
+      var mw=Math.pow(2,32), result='', words=[], bitLen=ascii.length*8;
+      var hash=sha256.h=sha256.h||[], k=sha256.k=sha256.k||[], pc=k.length, isC={}, i, j;
+      for(var c=2;pc<64;c++){
+        if(!isC[c]){
+          for(i=0;i<313;i+=c) isC[i]=c;
+          hash[pc]=(Math.pow(c,.5)*mw)|0;
+          k[pc++]=(Math.pow(c,1/3)*mw)|0;
+        }
+      }
+      ascii+='\x80';
+      while(ascii.length%64-56) ascii+='\x00';
+      for(i=0;i<ascii.length;i++){
+        j=ascii.charCodeAt(i);
+        if(j>>8) return '';
+        words[i>>2]|=j<<((3-i)%4)*8;
+      }
+      words[words.length]=((bitLen/mw)|0);
+      words[words.length]=(bitLen);
+      for(j=0;j<words.length;){
+        var w=words.slice(j,j+=16), oldHash=hash;
+        hash=hash.slice(0,8);
+        for(i=0;i<64;i++){
+          var w15=w[i-15], w2=w[i-2];
+          var a=hash[0], e=hash[4];
+          var t1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+          var t2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+          hash=[(t1+t2)|0].concat(hash);
+          hash[4]=(hash[4]+t1)|0;
+        }
+        for(i=0;i<8;i++) hash[i]=(hash[i]+oldHash[i])|0;
+      }
+      for(i=0;i<8;i++) for(j=3;j+1;j--){var b=(hash[i]>>(j*8))&255; result+=((b<16)?0:'')+b.toString(16);}
+      return result;
+    }
+
     // TAUTAN GOOGLE FORM:
     const FORM_URL = "https://forms.gle/jr9W2vHR9pT66LhB6"; 
     
     let examDurationMinutes = 75;
-    const maxViolations = 3;
+    const maxViolations = 5;
 
     let timeRemaining = examDurationMinutes * 60;
     let violationCount = 0;
@@ -551,8 +521,6 @@
     const timerDisplay = document.getElementById('timer');
     const violationText = document.getElementById('violationText');
     const warningText = document.getElementById('warningText');
-    const inputToken = document.getElementById('inputToken');
-    const tokenError = document.getElementById('tokenError');
     const frameContainer = document.getElementById('frameContainer');
 
     // ====================================================
@@ -583,11 +551,85 @@
     }
 
     // ====================================================
+    // 1B. ALARM PELANGGARAN KE-5 (sirine keras + getar)
+    // Diputar lewat elemen <audio> (jalur "media"), sehingga tetap bunyi walau
+    // HP dalam mode senyap/silent. Elemen "dibuka" saat siswa menekan tombol
+    // Mulai (syarat browser agar audio boleh diputar otomatis).
+    // ====================================================
+    const ALARM_SECONDS = 20; // lama alarm berbunyi (detik)
+    let alarmAudio = null;
+    let alarmStopTimer = null;
+
+    function buildSirenUrl() {
+      const rate = 22050, dur = 2;          // 2 detik, diputar berulang
+      const n = rate * dur;
+      const buf = new ArrayBuffer(44 + n * 2);
+      const v = new DataView(buf);
+      const wr = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+      wr(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); wr(8, 'WAVE');
+      wr(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+      v.setUint32(24, rate, true); v.setUint32(28, rate * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+      wr(36, 'data'); v.setUint32(40, n * 2, true);
+      let phase = 0;
+      for (let i = 0; i < n; i++) {
+        const t = i / rate;
+        const f = 1100 + 400 * Math.sin(2 * Math.PI * t); // sapuan 700-1500 Hz tiap 1 detik
+        phase += f / rate;
+        const s = (phase % 1) < 0.5 ? 1 : -1;            // gelombang kotak = paling nyaring
+        v.setInt16(44 + i * 2, s * 30000, true);
+      }
+      return URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
+    }
+
+    // Dipanggil saat tombol "Mulai Mengerjakan" ditekan (butuh sentuhan pengguna)
+    function prepareAlarm() {
+      try {
+        if (alarmAudio) return;
+        alarmAudio = new Audio(buildSirenUrl());
+        alarmAudio.loop = true;
+        alarmAudio.volume = 1;
+        alarmAudio.preload = 'auto';
+        // "Buka kunci" audio secara senyap agar nanti boleh diputar otomatis
+        alarmAudio.muted = true;
+        const p = alarmAudio.play();
+        const done = () => { alarmAudio.pause(); alarmAudio.currentTime = 0; alarmAudio.muted = false; };
+        if (p && p.then) { p.then(done).catch(() => { alarmAudio.muted = false; }); } else { done(); }
+      } catch (e) {}
+    }
+
+    function playAlarm() {
+      try {
+        if (alarmAudio) {
+          alarmAudio.muted = false;
+          alarmAudio.volume = 1;
+          alarmAudio.currentTime = 0;
+          alarmAudio.play().catch(() => {});
+        }
+        if (navigator.vibrate) {
+          const pattern = [];
+          for (let i = 0; i < ALARM_SECONDS; i++) pattern.push(600, 400);
+          navigator.vibrate(pattern);
+        }
+        clearTimeout(alarmStopTimer);
+        alarmStopTimer = setTimeout(stopAlarm, ALARM_SECONDS * 1000);
+      } catch (e) {}
+    }
+
+    function stopAlarm() {
+      try {
+        clearTimeout(alarmStopTimer);
+        if (alarmAudio) { alarmAudio.pause(); alarmAudio.currentTime = 0; }
+        if (navigator.vibrate) navigator.vibrate(0);
+      } catch (e) {}
+    }
+
+    // ====================================================
     // 2. EKSEKUSI KUNCI PERANGKAT PERMANEN
     // ====================================================
-    function lockDevicePermanently(reason) {
+    function lockDevicePermanently(reason, withAlarm) {
       isExamActive = false;
       clearInterval(timerInterval);
+      if (withAlarm) playAlarm();
 
       localStorage.setItem("CBT_LOCK_" + EXAM_ID, JSON.stringify({
         locked: true,
@@ -611,30 +653,39 @@
     }
 
     // ====================================================
-    // 3. RESET KUNCI PERANGKAT OLEH PENGAWAS
+    // 2B. RESET TERSEMBUNYI OLEH PENGAWAS
+    // Ketuk 5x cepat (dalam 4 detik) di pojok kanan atas kartu "Perangkat Dikunci",
+    // lalu masukkan kata sandi pengawas.
     // ====================================================
-    function toggleProctorReset() {
-      const box = document.getElementById('proctorResetBox');
-      box.classList.toggle('hidden');
-    }
+    let secretTaps = 0;
+    let secretTimer = null;
 
-    function resetDeviceLock() {
-      const input = document.getElementById('resetTokenInput').value.trim().toUpperCase();
-      const err = document.getElementById('resetError');
-      
-      if (input === PROCTOR_TOKEN) {
-        localStorage.removeItem("CBT_LOCK_" + EXAM_ID);
-        alert("Kunci perangkat berhasil dibuka oleh pengawas. Halaman akan dimuat ulang.");
-        location.reload();
-      } else {
-        err.classList.remove('hidden');
+    function secretTap() {
+      secretTaps++;
+      clearTimeout(secretTimer);
+      secretTimer = setTimeout(() => { secretTaps = 0; }, 4000);
+
+      if (secretTaps >= 5) {
+        secretTaps = 0;
+        clearTimeout(secretTimer);
+        stopAlarm(); // pengawas dapat mendiamkan alarm dengan ketukan rahasia
+        const input = prompt("Kata sandi pengawas:");
+        if (input === null) return;
+        if (sha256(EXAM_ID + ":" + input.trim()) === RESET_HASH) {
+          localStorage.removeItem("CBT_LOCK_" + EXAM_ID);
+          alert("Kunci perangkat berhasil dibuka. Halaman akan dimuat ulang.");
+          location.reload();
+        } else {
+          alert("Kata sandi salah.");
+        }
       }
     }
 
     // ====================================================
-    // 4. ALUR UJIAN AKTIF
+    // 3. ALUR UJIAN AKTIF
     // ====================================================
     async function startExam() {
+      prepareAlarm(); // harus dipanggil langsung dari sentuhan tombol Mulai
       const docEl = document.documentElement;
       if (docEl.requestFullscreen) {
         docEl.requestFullscreen().catch(() => {});
@@ -642,7 +693,7 @@
         docEl.webkitRequestFullscreen();
       }
 
-      // Mencegah layar HP mati/sleep otomatis saat murid menghitung rumus gerak
+      // Mencegah layar HP mati/sleep otomatis saat murid mengerjakan
       try {
         if ('wakeLock' in navigator) {
           wakeLockSentinel = await navigator.wakeLock.request('screen');
@@ -680,38 +731,29 @@
       violationText.textContent = `Pelanggaran: ${violationCount}/${maxViolations}`;
 
       if (violationCount >= maxViolations) {
-        lockDevicePermanently(`Akses Dihentikan! Anda telah mencapai batas toleransi (${maxViolations}x) pelanggaran.`);
+        lockDevicePermanently(`Akses Dihentikan! Anda telah mencapai batas toleransi (${maxViolations}x) pelanggaran. Ujian dinyatakan selesai.`, true);
       } else {
-        warningText.innerHTML = `Terdeteksi: <b>${reason}</b>.<br><br>Pelanggaran ke-<b>${violationCount}</b> dari ${maxViolations}. Panggil pengawas untuk membuka kunci kembali.`;
-        inputToken.value = "";
-        tokenError.classList.add('hidden');
+        const sisa = maxViolations - violationCount;
+        warningText.innerHTML = `Terdeteksi: <b>${reason}</b>.<br><br>Pelanggaran ke-<b>${violationCount}</b> dari ${maxViolations}. Sisa kesempatan: <b>${sisa}x</b>. Pada pelanggaran ke-${maxViolations}, ujian langsung berakhir dan tidak dapat dibuka lagi.`;
         warningModal.classList.remove('hidden');
       }
     }
 
-    function unlockExam() {
-      const enteredToken = inputToken.value.trim().toUpperCase();
-      if (enteredToken === PROCTOR_TOKEN) {
-        tokenError.classList.add('hidden');
-        warningModal.classList.add('hidden');
+    function resumeExam() {
+      warningModal.classList.add('hidden');
 
-        const docEl = document.documentElement;
-        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-          if (docEl.requestFullscreen) {
-            docEl.requestFullscreen().catch(() => {});
-          } else if (docEl.webkitRequestFullscreen) {
-            docEl.webkitRequestFullscreen();
-          }
+      const docEl = document.documentElement;
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        if (docEl.requestFullscreen) {
+          docEl.requestFullscreen().catch(() => {});
+        } else if (docEl.webkitRequestFullscreen) {
+          docEl.webkitRequestFullscreen();
         }
-      } else {
-        tokenError.classList.remove('hidden');
-        inputToken.value = "";
-        inputToken.focus();
       }
     }
 
     // ====================================================================
-    // 5. DETEKSI KECURANGAN KETAT (JENDELA MENGAMBANG, BOLA PINTAS, SPLIT)
+    // 4. DETEKSI KECURANGAN KETAT (JENDELA MENGAMBANG, BOLA PINTAS, SPLIT)
     // ====================================================================
 
     // A. DETEKSI HILANG FOKUS SISTEM REAL-TIME (Anti-Jendela Mengambang & Bola Pintas)
