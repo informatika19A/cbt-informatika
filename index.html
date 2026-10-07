@@ -4,6 +4,7 @@
   <head>
   <!-- 1. Meta Charset Wajib Paling Atas -->
   <meta charset="UTF-8">
+  <meta name="theme-color" content="#d6e8ff">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>CBT - Informatika 2026</title>
   
@@ -20,11 +21,11 @@
       --primary: #1d4ed8;        /* Deep Kinetic Blue */
       --primary-hover: #1e40af;
       --accent: #0284c7;         /* Vector Velocity Cyan */
-      --bg-canvas: #f8fafc;
-      --card-bg: #ffffff;
+      --bg-canvas: #cfe5ff;
+      --card-bg: #e4f1ff;
       --text-main: #0f172a;
-      --text-muted: #64748b;
-      --border-color: #e2e8f0;
+      --text-muted: #475569;
+      --border-color: #7fb2f5;
       --danger: #ef4444;
     }
 
@@ -50,14 +51,14 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* === BACKGROUND CERAH INFORMATIKA === */
+    /* === BACKGROUND CERAH KINEMATIKA FISIKA === */
     .bg-mesh {
       position: absolute;
       inset: 0;
       background: 
-        radial-gradient(circle at 12% 15%, rgba(186, 230, 253, 0.55) 0%, transparent 45%),
-        radial-gradient(circle at 88% 85%, rgba(224, 231, 255, 0.6) 0%, transparent 45%),
-        #f8fafc;
+        radial-gradient(circle at 12% 15%, rgba(56, 189, 248, 0.50) 0%, transparent 45%),
+        radial-gradient(circle at 88% 85%, rgba(99, 140, 255, 0.35) 0%, transparent 45%),
+        #bfdbfe;
       z-index: 0;
       pointer-events: none;
     }
@@ -82,7 +83,7 @@
       align-items: center;
       padding: 20px;
       z-index: 9999;
-      background: rgba(15, 23, 42, 0.55);
+      background: rgba(37, 99, 235, 0.45);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       overflow-y: auto;
@@ -101,13 +102,13 @@
       z-index: 10;
     }
 
-    /* Badge Ikon Informatika */
+    /* Badge Ikon Fisika: Lintasan & Vektor Gerak */
     .motion-badge {
       width: 74px;
       height: 74px;
       margin: 0 auto 12px auto;
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
+      background: #c4dffd;
+      border: 1px solid #60a5fa;
       border-radius: 50%;
       display: flex;
       justify-content: center;
@@ -123,8 +124,8 @@
     .sub-badge {
       display: inline-block;
       padding: 4px 12px;
-      background: #e0f2fe;
-      border: 1px solid #bae6fd;
+      background: #bfe3fb;
+      border: 1px solid #6bb8ee;
       border-radius: 20px;
       color: #0369a1;
       font-size: 0.72rem;
@@ -158,8 +159,8 @@
     }
 
     .info-box {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
+      background: #f0f8ff;
+      border: 1px solid #93c5fd;
       border-radius: 12px;
       padding: 10px;
       text-align: left;
@@ -248,8 +249,8 @@
     /* Header Ujian Aktif */
     header {
       height: 60px;
-      background: #ffffff;
-      border-bottom: 1px solid #e2e8f0;
+      background: #d6e8ff;
+      border-bottom: 1px solid #7fb2f5;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -283,8 +284,8 @@
     }
 
     .timer-badge {
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
+      background: #f0f8ff;
+      border: 1px solid #60a5fa;
       padding: 6px 14px;
       border-radius: 20px;
       font-family: ui-monospace, monospace;
@@ -315,7 +316,7 @@
       bottom: 0;
       width: 100%;
       height: calc(100% - 60px);
-      background: #ffffff;
+      background: #cfe5ff;
       z-index: 10;
       overflow-y: auto !important;
       -webkit-overflow-scrolling: touch !important;
@@ -344,7 +345,7 @@
   <div id="startScreen" class="overlay">
     <div class="card">
       
-      <!-- Ikon Tentang Informatika -->
+      <!-- Ikon Fisika: Lintasan Parabola & Vektor Kecepatan -->
       <div class="motion-badge">
 		<svg class="motion-svg" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 			<rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
@@ -425,7 +426,7 @@
       <p id="lockMessage" class="subtitle" style="margin-top: 8px; font-weight: 600; color: #334155;">
         Akses ujian di perangkat ini telah dihentikan secara permanen oleh sistem.
       </p>
-      <p style="font-size: 0.75rem; color: #94a3b8; line-height: 1.4;">
+      <p style="font-size: 0.75rem; color: #475569; line-height: 1.4;">
         Membuka kembali tautan ini tidak akan membuka ujian. Silakan lapor langsung kepada pengawas di ruangan.
       </p>
     </div>
@@ -449,7 +450,7 @@
     <div class="timer-badge" id="timer">75:00</div>
   </header>
 
-  <!-- Area Google Form Resmi Informatika -->
+  <!-- Area Google Form Resmi Fisika Materi Gerak -->
   <div class="form-container" id="frameContainer">
     <!-- Iframe dimuat secara dinamis via JavaScript -->
   </div>
